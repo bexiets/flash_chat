@@ -1,0 +1,16 @@
+{
+    "users": [
+        {
+            "name": "Beksultan",
+            "age": 25,
+            "id": "STpzK7yhFX9UzncN1SXT",
+            "hasPaid": true
+        },
+        {
+            "name": "Dautbek",
+            "age": 26,
+            "id": "VydEsDtVQFjFXnWY9jkp",
+            "hasPaid": false
+        }
+    ]
+}
