@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash_chat/chat_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -8,6 +12,22 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  var _emailController = TextEditingController();
+  var _passwordController = TextEditingController();
+  final auth = FirebaseAuth.instance;
+
+  Future signInwithEmail() async{
+    final result = await auth.signInWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);  
+    log('result $result');
+
+    if(!mounted) return;
+    await Navigator.push(context, MaterialPageRoute(builder: (context){
+      return ChatPage(email: result.user!.email!, userId: result.user!.uid);
+    }));
+  }
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +46,7 @@ class _LoginPageState extends State<LoginPage> {
           Padding(
           padding: const EdgeInsets.fromLTRB(30,0,30,0),
           child: TextFormField(
+            controller: _emailController,
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.account_box_sharp),
               focusedBorder: OutlineInputBorder(
@@ -53,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
         Padding(
           padding: const EdgeInsets.fromLTRB(30,0,30,0),
           child: TextFormField(
+            controller: _passwordController,
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.key),
               focusedBorder: OutlineInputBorder(
@@ -83,7 +105,9 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(32.0)),
               minimumSize: Size(350, 50),
           ),
-                  onPressed: () {}, 
+                  onPressed: () async{
+                    await signInwithEmail();
+                  }, 
                   child: Text(
                     'Sign In',
                     style: TextStyle(
@@ -98,3 +122,4 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
